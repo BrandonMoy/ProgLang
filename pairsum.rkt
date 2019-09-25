@@ -20,8 +20,9 @@
 
 (define pair-sum-lazy?
   (lambda (lazy-list val)
-    (if (equal? (cdr lazy-list) #f)
+    (if (equal? ((cdr lazy-list)) #f)
         #f
-        (if (= (+ (car lazy-list) (car (cdr lazy-list))) val)
+        (if (= (+ (car lazy-list) (car ((cdr lazy-list)) )) val)
             #t
-            (pair-sum-lazy? (cdr lazy-list) val)))))
+            (pair-sum-lazy? ((cdr lazy-list)) val)))))
+
