@@ -7,7 +7,7 @@
         (cons (car l) (keep-first-n (- n 1) (cdr l)))))))
 
 (define sum
-  (lambda l
+  (lambda (l)
     (if (null? l)
         0
         (+ (car l) (sum (cdr l))))))
