@@ -40,7 +40,7 @@
     (cons (car lazy-list) (lambda () (sieve (filter-multiples ((cdr lazy-list)) (car lazy-list)))))))
 
 (define primes
-  (lambda () ; is this lambda necessary? 
+  (lambda () 
     (sieve (inf-seq 2))))
 
 ;(first-n (primes) 10) ; (2 3 5 7 11 13 17 19 23 29)
@@ -57,15 +57,14 @@
     (count-helper (first-n (primes) n) n)))
 
 (define twin-helper
-  (lambda lazy-list
-    (if (= (+ (car lazy-list) 2) (car ((cdr lazy-list))))
-        (cons (cons (car lazy-list) (car ((cdr lazy-list)))) (lambda () (twin-helper ((cdr ((cdr lazy-list)))))))
+  (lambda (lazy-list)
+    (if (= (+ (car lazy-list) 2) (car ((cdr lazy-list)))) ; if the 1st # = the 2nd # + 2
+        (cons (cons (car lazy-list) (car ((cdr lazy-list)))) (lambda () (twin-helper ((cdr lazy-list))))) ; cons the first number iwth teh second number
         (twin-helper ((cdr lazy-list))))))
 
 (define twin-primes
   (lambda ()
-    (twin-helper (primes))))
+    (twin-helper (primes)))) 
 
 
-    ; check whether or not primes are separated by two
-    ; recurse through list and see if the current and next one are separated by two 
+(first-n (twin-primes) 5)
