@@ -1,0 +1,79 @@
+(define curry3
+  (lambda (f)
+    (lambda (x)
+      (lambda (y)
+        (lambda (z)
+          (f (f x y) z))))))
+
+
+(define uncurry3
+  (lambda (f)
+     (lambda (x y z)
+       (((f x)y)z))))
+
+
+
+
+
+(define my-filter
+  (lambda(f lst)
+    (if (null? lst)
+      '()
+      (if (f (car lst))
+          (cons (car lst) (my-filter f (cdr lst)))
+          (my-filter f (cdr lst))))))
+
+(define (member? x list)
+     (if (null? list) #f                               
+         (if (equal? x (car list)) #t                   
+              (member? x (cdr list)))))
+
+(define =?
+  (lambda(x)
+    (lambda(y)
+      (= x y))))
+
+(define intersection
+  (lambda (lst1 lst2)
+    (if (null? lst1)
+        '()
+         (if (null? (my-filter (=? (car lst1)) lst2))
+             (intersection (cdr lst1) lst2)
+             (cons (car (my-filter (=? (car lst1)) lst2)) (intersection (cdr lst1) lst2))))))
+
+(define union
+  (lambda (lst1 lst2)
+    (if (null? lst2)
+        lst1
+        (if (null? (my-filter (=? (car lst2)) lst1))
+            (union (cons (car lst2) lst1) (cdr lst2))
+            (union lst1 (cdr lst2))))))
+            
+
+(define exists
+  (lambda (f lst)
+    (if (null? (my-filter f lst))
+        #f
+        #t)))
+
+
+(define flatmap
+  (lambda (f lst)
+    (flatten (map f lst))))
+
+(define flatten
+  (lambda (lst)
+    (if (null? (cdr lst))
+        (car lst)
+        (if (list? (car lst))
+            (flatten (car lst))
+            
+            (cons (car lst) (flatten (cdr lst)) )))))
+
+
+(define doubleup (lambda (x) (list x x)))
+(flatmap doubleup '(1 2 3))
+
+           
+
+

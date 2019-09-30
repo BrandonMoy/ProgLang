@@ -30,10 +30,25 @@
 (define make-lazy
   (lambda (lst)
     (if (null? (cdr lst))
-        (car lst) ; if this is the last item in the list return it
+        (cons (car lst) (lambda () #f)); if this is the last item in the list return it
         (cons (car lst)
               (lambda () (make-lazy (cdr lst)))))))
 
-;(define any-sum-lazy?
-;  (lambda (lst val)
-    
+(define any-sum-helper
+  (lambda (lst val)
+    (cond
+      ((= (car lst) val) #t)
+      ((equal? ((cdr lst)) #f) #f)
+     (else (any-sum-helper ((cdr lst)) val)))))
+ 
+(define any-sum-lazy?
+  (lambda (lst val)
+    (if (equal? ((cdr((cdr lst)))) #f) ; test to see if you're at the end of the list
+        (if (= (+ (car ((cdr lst))) (car lst)) val) ; test last two numbers w/out helper function
+            #t
+            #f)
+        (if (any-sum-helper ((cdr lst)) (- val (car lst))) ; use helper fn to check through rest of list
+            #t
+            (if (equal? ((cdr lst)) #f)
+                #f
+                (any-sum-lazy? ((cdr lst)) val))))))
