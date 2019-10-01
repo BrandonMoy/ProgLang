@@ -17,18 +17,21 @@
 ;;(first-n (inf-seq 1) 5) ; test case
 ;(first-n (seq 1 2) 5)
 
-(define n-th
+(define nth
   (lambda (lazy-list n)
-    (if (= n 1)
-        (car lazy-list)
-        (n-th ((cdr lazy-list)) (- n 1)))))
-;(n-th (inf-seq 1) 5)
+    (if (not lazy-list)
+        #f
+        (if (= n 1)
+            (car lazy-list)
+            (nth ((cdr lazy-list)) (- n 1))))))
+
+;(nth (inf-seq 1) 5)
 
 (define filter-multiples ; should return a lazy list
   (lambda (lazy-list n)
     (if (not lazy-list)
         '()
-        (if  (= (remainder (car lazy-list) n) 0);(integer? (/ ((car lazy-list) n))) ;is the first item divisible by n
+        (if  (= (remainder (car lazy-list) n) 0) ; (integer? (/ ((car lazy-list) n))) ;is the first item divisible by n
              (filter-multiples ((cdr lazy-list)) n)
              (cons (car lazy-list) (lambda () (filter-multiples ((cdr lazy-list)) n)))))))
 ;(filter-multiples (seq 2 6) 2)  ;---> (3 5)
@@ -44,7 +47,7 @@
     (sieve (inf-seq 2))))
 
 ;(first-n (primes) 10) ; (2 3 5 7 11 13 17 19 23 29)
-;(n-th (primes) 20) ; 71
+;(nth (primes) 20) ; 71
 
 (define count-helper
   (lambda (lst n)
@@ -66,5 +69,4 @@
   (lambda ()
     (twin-helper (primes)))) 
 
-
-(first-n (twin-primes) 5)
+;(first-n (twin-primes) 5)
